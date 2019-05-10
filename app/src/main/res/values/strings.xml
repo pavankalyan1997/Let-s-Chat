@@ -1,0 +1,7 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="ExtraTranslation">Let\'sChat</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="no_account">Don\'t Have an Account? Click here</string>
+    <string name="have_an_account">Already have an Account? Click here</string>
+</resources>

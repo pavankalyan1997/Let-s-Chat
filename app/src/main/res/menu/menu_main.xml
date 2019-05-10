@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="Home"/>
+    <item
+        android:id="@+id/logIn"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="Login"/>
+    <item
+        android:id="@+id/logOut"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="LogOut"/>
+
+</menu>
