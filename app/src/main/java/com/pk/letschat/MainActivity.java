@@ -16,9 +16,8 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
-    NavigationView navigationView;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle Toggle;
     static boolean isLogged=false;
@@ -36,20 +35,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
         Toggle.syncState();
 
-        // Display Navigation
-        navigationView=findViewById(R.id.MainNavigation);
-        navigationView.setNavigationItemSelectedListener(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(isLogged){
-            CommonFunctions.hideNavigationItems(navigationView);
-        }
 
-    }
-    private void goToLogin(){
-        startActivity(new Intent(this, LogIn.class));
-    }
-    private void goToMain(){
-        startActivity(new Intent(this,MainActivity.class));
+
     }
 
     @Override
@@ -67,11 +54,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        CommonFunctions.navigationMenu(this,menuItem);
-        return false;
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

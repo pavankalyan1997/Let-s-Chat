@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 
-public class SignUp extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class SignUp extends AppCompatActivity{
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle Toggle;
@@ -47,16 +48,11 @@ public class SignUp extends AppCompatActivity implements NavigationView.OnNaviga
         //Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();
         ref=FirebaseDatabase.getInstance().getReference();
-
-
-        //Display Navigation
         drawerLayout=findViewById(R.id.DrawerLayoutSignUp);
         Toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
         Toggle.syncState();
 
-        navigationView=findViewById(R.id.SignUpNavigation);
-        navigationView.setNavigationItemSelectedListener(this);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         txtEmail=findViewById(R.id.eMailSignUp);
         txtUserName=findViewById(R.id.userNameSignUp);
@@ -82,10 +78,26 @@ public class SignUp extends AppCompatActivity implements NavigationView.OnNaviga
                 final String phoneNumber=txtPhonenumber.getEditText().getText().toString().trim();
 
                 if(email.isEmpty()){
-                    txtEmail.setError("Email Can't be empty");
+                    txtEmail.getEditText().setError("Email is required");
+                    txtEmail.requestFocus();
+                    return;
+                }
+
+                if(! Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    txtEmail.setError("Please enter Valid Email");
+                    txtEmail.requestFocus();
+                    return;
                 }
                 if(password.isEmpty()){
-                    txtPassword.setError("Password can't be empty");
+                    txtPassword.getEditText().setError("Password is required");
+                    txtPassword.requestFocus();
+                    return;
+                }
+
+                if(password.length()<6){
+                    txtPassword.getEditText().setError("Length of password should be minimum 6 characters");
+                    txtPassword.requestFocus();
+                    return;
                 }
                 signUpProgressbar.setVisibility(View.VISIBLE);
 
@@ -135,13 +147,9 @@ public class SignUp extends AppCompatActivity implements NavigationView.OnNaviga
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
+        menu.findItem(R.id.main).setVisible(false);
+        menu.findItem(R.id.logOut).setVisible(false);
         return true;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        CommonFunctions.navigationMenu(this,menuItem);
-        return false;
     }
 
     @Override
