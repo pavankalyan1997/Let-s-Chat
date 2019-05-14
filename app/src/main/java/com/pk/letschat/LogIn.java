@@ -1,8 +1,6 @@
 package com.pk.letschat;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -117,8 +115,7 @@ public class LogIn extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.main).setVisible(false);
-        menu.findItem(R.id.logOut).setVisible(false);
+        CommonFunctions.hideMenuItems(menu);
 
         return true;
     }
@@ -129,7 +126,7 @@ public class LogIn extends AppCompatActivity{
             return true;
         }
 
-        CommonFunctions.navigationMenu(this,item);
+        CommonFunctions.populateMenuItems(this,item);
         return true;
     }
 

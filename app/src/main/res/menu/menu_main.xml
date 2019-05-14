@@ -11,6 +11,11 @@
     <item
         android:id="@+id/logOut"
         android:icon="@drawable/common_full_open_on_phone"
-        android:title="LogOut"/>
+        android:title="Sign Out"/>
+
+    <item
+        android:id="@+id/settingsMenu"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="Settings"/>
 
 </menu>

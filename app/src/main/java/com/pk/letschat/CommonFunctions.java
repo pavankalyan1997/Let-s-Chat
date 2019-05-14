@@ -2,16 +2,31 @@ package com.pk.letschat;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Date;
+
+
+import static android.content.Context.NOTIFICATION_SERVICE;
+import static android.support.v4.content.ContextCompat.getSystemService;
 import static android.support.v4.content.ContextCompat.startActivity;
 
 public class CommonFunctions {
@@ -35,6 +50,10 @@ public class CommonFunctions {
     }
     public static void goToSignUp(Context ctx){
         Intent intent=new Intent(ctx,SignUp.class);
+        ctx.startActivity(intent);
+    }
+    public static void goToSettings(Context ctx){
+        Intent intent=new Intent(ctx,Settings.class);
         ctx.startActivity(intent);
     }
     public static void LogOut(Context ctx){
@@ -61,7 +80,7 @@ public class CommonFunctions {
 
 
     }
-    public static void navigationMenu(Context ctx, MenuItem item){
+    public static void populateMenuItems(Context ctx, MenuItem item){
         switch(item.getItemId()){
             case R.id.logIn:
                 CommonFunctions.goToLogin(ctx);
@@ -72,13 +91,17 @@ public class CommonFunctions {
             case R.id.logOut:
                 CommonFunctions.LogOut(ctx);
                 break;
+            case R.id.settingsMenu:
+                CommonFunctions.goToSettings(ctx);
+                break;
         }
     }
-    public static void hideNavigationItems(NavigationView navigationView){
-        Menu  menu=navigationView.getMenu();
-        menu.findItem(R.id.logIn).setVisible(false);
+
+
+    public static void hideMenuItems(Menu menu) {
+        menu.findItem(R.id.main).setVisible(false);
+        menu.findItem(R.id.logOut).setVisible(false);
+        menu.findItem(R.id.settingsMenu).setVisible(false);
     }
-
-
 
 }

@@ -1,6 +1,5 @@
 package com.pk.letschat;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputLayout;
@@ -147,8 +146,7 @@ public class SignUp extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-        menu.findItem(R.id.main).setVisible(false);
-        menu.findItem(R.id.logOut).setVisible(false);
+        CommonFunctions.hideMenuItems(menu);
         return true;
     }
 
@@ -157,7 +155,7 @@ public class SignUp extends AppCompatActivity{
         if(Toggle.onOptionsItemSelected(item)){
             return true;
         }
-        CommonFunctions.navigationMenu(this,item);
+        CommonFunctions.populateMenuItems(this,item);
         return true;
     }
 

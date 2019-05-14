@@ -1,15 +1,16 @@
 package com.pk.letschat;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.design.widget.NavigationView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
@@ -21,19 +22,25 @@ public class MainActivity extends AppCompatActivity{
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle Toggle;
     static boolean isLogged=false;
+    SQLiteDatabase sqLiteDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setContentView(R.layout.activity_main);
+        sqLiteDatabase=openOrCreateDatabase("CHAT",MODE_PRIVATE,null);
         FirebaseApp.initializeApp(this);
         FirebaseApp.initializeApp(MainActivity.this);
         mAuth = FirebaseAuth.getInstance();
         drawerLayout=findViewById(R.id.DrawerLayoutMain);
         Toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
         Toggle.syncState();
+        String createSQL="create table if not exists userDetails(Name varchar,phoneNumber varchar,eMail varchar)";
+        sqLiteDatabase.execSQL(createSQL);
+
+
 
 
 
@@ -72,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
         if(Toggle.onOptionsItemSelected(item)){
             return true;
         }
-        CommonFunctions.navigationMenu(this,item);
+        CommonFunctions.populateMenuItems(this,item);
         return true;
     }
 

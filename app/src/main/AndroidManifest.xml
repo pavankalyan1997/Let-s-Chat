@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.pk.letschat">
 
+
+    <uses-feature android:name="android.hardware.camera" ></uses-feature>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,12 +15,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignUp"
-            android:label="Sign Up"></activity>
-        <activity android:name=".LogIn"
-            android:label="Login"></activity>
-        <activity android:name=".MainActivity"
-            android:label="Let's Chat">
+        <activity android:name=".Settings"></activity>
+        <activity
+            android:name=".SignUp"
+            android:label="Sign Up" />
+        <activity
+            android:name=".LogIn"
+            android:label="Login" />
+        <activity
+            android:name=".MainActivity"
+            android:label="Let&apos;s Chat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
