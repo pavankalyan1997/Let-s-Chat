@@ -1,11 +1,11 @@
 package com.pk.letschat;
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
@@ -117,6 +117,7 @@ public class SignUp extends AppCompatActivity{
                             user.put("phoneNumber",phoneNumber);
                             user.put("profilePic","null");
                             user.put("thumbNail","null");
+                            user.put("status","Hi There I am using Let's Chat");
                             ref.setValue(user).addOnCompleteListener(SignUp.this, new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {

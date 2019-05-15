@@ -1,8 +1,6 @@
 package com.pk.letschat;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,27 +9,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ExifInterface;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.StrictMode;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.content.FileProvider;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -39,13 +29,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -53,12 +43,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -69,8 +66,6 @@ import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 
-import static android.app.PendingIntent.FLAG_ONE_SHOT;
-
 public class Settings extends AppCompatActivity {
 
     DrawerLayout drawerLayout;
@@ -80,9 +75,9 @@ public class Settings extends AppCompatActivity {
     static boolean isLogged=false;
     SQLiteDatabase sqLiteDatabase;
     LinearLayout nameLayout,aboutLayout;
-    TextView nameActual,aboutActual;
+    TextView nameActual,aboutActual,phoneNumberActual;
     Uri uriProfileImage;
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog,loadProcess;
 
     private DatabaseReference mUserDatabase;
     private FirebaseUser mCurrentUser;
@@ -114,21 +109,63 @@ public class Settings extends AppCompatActivity {
         mImageStorage = FirebaseStorage.getInstance().getReference();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        String current_uid = mCurrentUser.getUid();
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
-        mUserDatabase.keepSynced(true);
-
         sqLiteDatabase=openOrCreateDatabase("CHAT",MODE_PRIVATE,null);
         drawerLayout=findViewById(R.id.DrawerLayoutSettings);
         Toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
+        Toggle.setHomeAsUpIndicator(0);
         Toggle.syncState();
 
         cameraPic=findViewById(R.id.cameraPic);
         profileImg=findViewById(R.id.profileImage);
+        phoneNumberActual=findViewById(R.id.PhoneNumberActual);
         nameLayout=findViewById(R.id.NameLayoutHorizontal);
         aboutLayout=findViewById(R.id.StatusLayoutHorizontal);
         nameActual=findViewById(R.id.NameActual);
         aboutActual=findViewById(R.id.StatusActual);
+
+        final String current_uid = mCurrentUser.getUid();
+        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("Users").child(current_uid);
+        mUserDatabase.keepSynced(true);
+
+        mUserDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                loadProcess = new ProgressDialog(Settings.this);
+                loadProcess.setTitle("Loading Data");
+                loadProcess.setMessage("Please wait your info is being loaded");
+                loadProcess.setCanceledOnTouchOutside(false);
+                loadProcess.show();
+
+                final String name=dataSnapshot.child("userName").getValue().toString();
+                final String status=dataSnapshot.child("status").getValue().toString();
+                final String phoneNumber=dataSnapshot.child("phoneNumber").getValue().toString();
+                final String thumbNail=dataSnapshot.child("thumbNail").getValue().toString();
+                final String profilePic=dataSnapshot.child("profilePic").getValue().toString();
+
+                mImageStorage.child("profile_images").child("thumbs").child(current_uid+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                            nameActual.setText(name);
+                            aboutActual.setText(status);
+                            phoneNumberActual.setText(phoneNumber);
+                            Picasso.get().load(uri.toString()).placeholder(R.drawable.propic).into(profileImg);
+                            loadProcess.dismiss();
+                    }
+                });
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+
+            }
+        });
+
+
+
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,11 +177,6 @@ public class Settings extends AppCompatActivity {
         cameraPic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*final int RESULT_GALLERY = 0;
-                Intent galleryIntent = new Intent(
-                        Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent , RESULT_GALLERY );*/
                 selectImage();
             }
         });
@@ -164,8 +196,36 @@ public class Settings extends AppCompatActivity {
                 builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String Name=inputName.getText().toString().trim();
-                        nameActual.setText(Name);
+                        final String Name=inputName.getText().toString().trim();
+                        boolean execute=true;
+                        if(Name.isEmpty()){
+                            Toast.makeText(Settings.this, "User Name Can't be empty", Toast.LENGTH_SHORT).show();
+                            execute=false;
+
+                        }
+                        else if(Name.length()<5){
+                            Toast.makeText(Settings.this, "User Name is too short", Toast.LENGTH_SHORT).show();
+                            execute=false;
+
+                        }
+                        if(execute){
+                            Map updateMap=new HashMap();
+                            updateMap.put("userName",Name);
+                            mUserDatabase.updateChildren(updateMap).addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if(task.isSuccessful()){
+                                        nameActual.setText(Name);
+                                    }
+                                    else{
+                                        Toast.makeText(Settings.this, "Some Error Occured", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+
+
+
                         dialog.cancel();
 
                     }
@@ -197,8 +257,33 @@ public class Settings extends AppCompatActivity {
                 builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        String Status=inputAbout.getText().toString().trim();
-                        aboutActual.setText(Status);
+                        final String Status=inputAbout.getText().toString().trim();
+                        boolean execute=true;
+                        if(Status.isEmpty()){
+                            Toast.makeText(Settings.this, "Status Can't be empty", Toast.LENGTH_SHORT).show();
+                            execute=false;
+                        }
+                        if(Status.length()>40){
+                            Toast.makeText(Settings.this, "Status can't be too large", Toast.LENGTH_SHORT).show();
+                            execute=false;
+                        }
+                        if(execute){
+                            Map update_map=new HashMap();
+                            update_map.put("status",Status);
+                            mUserDatabase.updateChildren(update_map).addOnCompleteListener(new OnCompleteListener() {
+                                @Override
+                                public void onComplete(@NonNull Task task) {
+                                    if(task.isSuccessful()){
+                                        aboutActual.setText(Status);
+                                    }
+                                    else{
+                                        Toast.makeText(Settings.this, "Some Error Occurred", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+                        }
+
                         dialog.cancel();
 
                     }
@@ -231,6 +316,7 @@ public class Settings extends AppCompatActivity {
             CommonFunctions.goToLogin(this);
         }else{
             isLogged=true;
+
         }
     }
 
@@ -263,14 +349,14 @@ public class Settings extends AppCompatActivity {
 
         String channelId = "some_channel_id";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        android.support.v4.app.NotificationCompat.Builder notificationBuilder =
-                new android.support.v4.app.NotificationCompat.Builder(this, channelId)
+        androidx.core.app.NotificationCompat.Builder notificationBuilder =
+                new androidx.core.app.NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.mipmap.ic_launcher_round)
                         .setContentTitle("Message from Ex")
                         .setContentText("This is an important Notification")
                         .setAutoCancel(true)
                         .setSound(defaultSoundUri)
-                        .setBadgeIconType(android.support.v4.app.NotificationCompat.BADGE_ICON_SMALL)
+                        .setBadgeIconType(androidx.core.app.NotificationCompat.BADGE_ICON_SMALL)
                         .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
@@ -302,22 +388,15 @@ public class Settings extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int item) {
                 if (options[item].equals("Take Photo"))
                 {
-                    if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                    {
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
-                    }
-                    else
-                    {
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-                    }
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, GALLERY_PICK);
                 }
                 else if (options[item].equals("Choose from Gallery"))
                 {
                     Intent intent = new Intent();
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, "Select Profile Image"), CHOOSE_IMAGE);
+                    startActivityForResult(Intent.createChooser(intent, "Select Profile Image"), GALLERY_PICK);
                 }
                 else if (options[item].equals("Cancel")) {
                     dialog.dismiss();
@@ -327,55 +406,12 @@ public class Settings extends AppCompatActivity {
         builder.show();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
-    {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == MY_CAMERA_PERMISSION_CODE)
-        {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_REQUEST);
-            }
-            else
-            {
-                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
-            }
-        }
 
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+       super.onActivityResult(requestCode, resultCode, data);
 
-        /*bitmap = null;
-        selectedImagePath = null;
-
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
-        {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            //bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, true);
-            profileImg.setImageBitmap(photo);
-        }
-        else if (resultCode == RESULT_OK && requestCode == CHOOSE_IMAGE) {
-            if(requestCode==CHOOSE_IMAGE && resultCode==RESULT_OK && data!=null && data.getData()!=null){
-                uriProfileImage=data.getData();
-
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uriProfileImage);
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, true);
-                    profileImg.setImageBitmap(bitmap);
-
-                    // upload image to firebase
-                }catch(IOException e){
-                    e.printStackTrace();
-                }
-            }
-        }*/
         if(requestCode == GALLERY_PICK && resultCode == RESULT_OK){
 
             Uri imageUri = data.getData();
@@ -430,6 +466,7 @@ public class Settings extends AppCompatActivity {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot thumb_taskSnapshot) {
                                 final String thumb_download_url=thumb_taskSnapshot.getMetadata().getReference().getDownloadUrl().toString();
+                                //final String tdu=mImageStorage.child("profile_images").child("thumbs").child(mCurrentUser.getUid()+".jpg").getDownloadUrl().toString();
                                 Map update_hashMap = new HashMap();
                                 update_hashMap.put("profilePic", download_url);
                                 update_hashMap.put("thumbNail", thumb_download_url);
