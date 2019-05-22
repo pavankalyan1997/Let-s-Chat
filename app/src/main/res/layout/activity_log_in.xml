@@ -7,101 +7,122 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
     tools:context=".LogIn">
-
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/userNameLogin"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="200dp"
-            android:layout_marginRight="20dp">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/userNameValue"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarLogin"
+                style="@style/ToolBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textWebEmailAddress"
-                android:password="false" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:background="@color/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:theme="@style/ToolBarStyle"
+                app:titleTextColor="@color/toolBarColor" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="292dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="383dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordValue"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/userNameLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="password"
-                android:password="true" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="200dp"
+                android:layout_marginRight="20dp">
 
-        <Button
-            android:id="@+id/logInButton"
-            android:layout_width="129dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="146dp"
-            android:layout_marginLeft="146dp"
-            android:layout_marginTop="296dp"
-            android:layout_marginEnd="134dp"
-            android:layout_marginRight="134dp"
-            android:layout_marginBottom="286dp"
-            android:background="@color/colorPrimary"
-            android:text="Login"
-            android:textColor="@color/common_google_signin_btn_text_dark_default"
-            android:textSize="18sp" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/userNameValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email"
+                    android:inputType="textWebEmailAddress"
+                    android:password="false" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/signUpTxt"
-            android:layout_width="315dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/logInButton"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="54dp"
-            android:layout_marginLeft="54dp"
-            android:layout_marginEnd="42dp"
-            android:layout_marginRight="42dp"
-            android:layout_marginBottom="-60dp"
-            android:text="@string/no_account"
-            android:textAlignment="center"
-            android:textSize="18sp" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/passwordLogin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="292dp"
+                android:layout_marginRight="20dp">
 
-        <ProgressBar
-            android:id="@+id/progressBarLogin"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="187dp"
-            android:layout_marginRight="187dp"
-            android:layout_marginBottom="416dp"
-            android:visibility="gone" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="password"
+                    android:password="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/logInButton"
+                android:layout_width="129dp"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/toolbarLogin"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="146dp"
+                android:layout_marginLeft="146dp"
+                android:layout_marginTop="397dp"
+                android:layout_marginEnd="134dp"
+                android:layout_marginRight="134dp"
+                android:background="@color/colorPrimary"
+                android:text="Login"
+                android:textColor="@color/common_google_signin_btn_text_dark_default"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/signUpTxt"
+                android:layout_width="315dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="513dp"
+                android:layout_marginEnd="46dp"
+                android:layout_marginRight="46dp"
+                android:text="@string/no_account"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <ProgressBar
+                android:id="@+id/progressBarLogin"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="187dp"
+                android:layout_marginRight="187dp"
+                android:layout_marginBottom="416dp"
+                android:visibility="gone" />
 
 
-    </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+
+
+
+
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

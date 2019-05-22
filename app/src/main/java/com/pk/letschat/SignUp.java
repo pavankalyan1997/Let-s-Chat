@@ -3,6 +3,8 @@ package com.pk.letschat;
 import androidx.annotation.NonNull;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +38,7 @@ public class SignUp extends AppCompatActivity{
     Button signUpButton;
     ProgressBar signUpProgressbar;
     DatabaseReference ref;
+    Toolbar mToolbar;
 
     private FirebaseAuth mAuth;
 
@@ -43,6 +46,9 @@ public class SignUp extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        mToolbar=findViewById(R.id.toolbarSignUp);
+        setSupportActionBar(mToolbar);
 
         //Initialize Firebase Authentication
         mAuth = FirebaseAuth.getInstance();

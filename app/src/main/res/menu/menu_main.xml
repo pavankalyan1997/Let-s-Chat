@@ -18,4 +18,9 @@
         android:icon="@drawable/common_full_open_on_phone"
         android:title="Settings"/>
 
+    <item
+        android:id="@+id/individualMessage"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="Message"/>
+
 </menu>

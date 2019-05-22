@@ -1,18 +1,29 @@
 package com.pk.letschat;
 
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
+
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
@@ -20,6 +31,8 @@ public class MainActivity extends AppCompatActivity{
     ActionBarDrawerToggle Toggle;
     static boolean isLogged=false;
     SQLiteDatabase sqLiteDatabase;
+    Toolbar mToolbar;
+
 
 
     @Override
@@ -27,6 +40,12 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mToolbar=findViewById(R.id.toolbarMain);
+        setSupportActionBar(mToolbar);
+
+
+        //setActionBar(mToolbar);
+        //setSupportActionBar(mToolbar);
         sqLiteDatabase=openOrCreateDatabase("CHAT",MODE_PRIVATE,null);
         FirebaseApp.initializeApp(this);
         FirebaseApp.initializeApp(MainActivity.this);
@@ -36,6 +55,34 @@ public class MainActivity extends AppCompatActivity{
         Toggle.syncState();
         String createSQL="create table if not exists userDetails(Name varchar,phoneNumber varchar,eMail varchar)";
         sqLiteDatabase.execSQL(createSQL);
+
+        TabLayout tabLayout=findViewById(R.id.tab_layout_main);
+        tabLayout.addTab(tabLayout.newTab().setText("Chats"));
+        tabLayout.addTab(tabLayout.newTab().setText("Group Chats"));
+        tabLayout.addTab(tabLayout.newTab().setText("Contacts"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        final ViewPager viewPager=findViewById(R.id.pager);
+        final PagerAdapter adapter=new PagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
 
 
@@ -79,5 +126,6 @@ public class MainActivity extends AppCompatActivity{
         CommonFunctions.populateMenuItems(this,item);
         return true;
     }
+
 
 }

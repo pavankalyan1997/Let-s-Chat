@@ -18,6 +18,7 @@ import android.os.StrictMode;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -92,6 +93,8 @@ public class Settings extends AppCompatActivity {
     String selectedImagePath;
     private static final int GALLERY_PICK = 1;
 
+    Toolbar mToolbar;
+
 
 
 
@@ -99,6 +102,11 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        mToolbar=findViewById(R.id.toolbarSettings);
+        setSupportActionBar(mToolbar);
+
+
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -142,16 +150,26 @@ public class Settings extends AppCompatActivity {
                 final String thumbNail=dataSnapshot.child("thumbNail").getValue().toString();
                 final String profilePic=dataSnapshot.child("profilePic").getValue().toString();
 
-                mImageStorage.child("profile_images").child("thumbs").child(current_uid+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
+                if(profilePic.equals("null")&&thumbNail.equals("null")){
+                    nameActual.setText(name);
+                    aboutActual.setText(status);
+                    phoneNumberActual.setText(phoneNumber);
+                    loadProcess.dismiss();
+                    return;
+                }
+                else {
+
+                    mImageStorage.child("profile_images").child("thumbs").child(current_uid + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
                             nameActual.setText(name);
                             aboutActual.setText(status);
                             phoneNumberActual.setText(phoneNumber);
                             Picasso.get().load(uri.toString()).placeholder(R.drawable.propic).into(profileImg);
                             loadProcess.dismiss();
-                    }
-                });
+                        }
+                    });
+                }
 
 
 
@@ -305,6 +323,7 @@ public class Settings extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -317,8 +336,10 @@ public class Settings extends AppCompatActivity {
         }else{
             isLogged=true;
 
+
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -327,6 +348,8 @@ public class Settings extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
         if(isLogged){
             MenuItem item=menu.findItem(R.id.logIn);
+            item.setVisible(false);
+            item=menu.findItem(R.id.settingsMenu);
             item.setVisible(false);
         }
         return true;

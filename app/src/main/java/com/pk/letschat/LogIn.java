@@ -2,6 +2,8 @@ package com.pk.letschat;
 
 import androidx.annotation.NonNull;
 import com.google.android.material.textfield.TextInputLayout;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +34,7 @@ public class LogIn extends AppCompatActivity{
     TextView txtNoAccount;
     Button loginButton;
     ProgressBar progressBar;
+    Toolbar mToolbar;
     private FirebaseAuth mAuth;
     static boolean isLogged=false;
 
@@ -39,6 +42,9 @@ public class LogIn extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+
+        mToolbar=findViewById(R.id.toolbarLogin);
+        setSupportActionBar(mToolbar);
 
         FirebaseApp.initializeApp(LogIn.this);
         mAuth = FirebaseAuth.getInstance();

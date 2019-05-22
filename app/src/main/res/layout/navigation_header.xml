@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="160dp"
     android:background="@color/common_google_signin_btn_text_dark_focused"
@@ -9,7 +10,7 @@
         android:id="@+id/proImgHeader"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:src="@drawable/common_full_open_on_phone" />
+        app:srcCompat="@drawable/common_full_open_on_phone" />
 
     <TextView
         android:id="@+id/pronameHeader"

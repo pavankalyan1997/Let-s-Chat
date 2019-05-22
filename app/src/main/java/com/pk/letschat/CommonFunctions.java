@@ -7,6 +7,7 @@ import android.content.Intent;
 
 import androidx.appcompat.app.AlertDialog;
 
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -37,6 +38,10 @@ public class CommonFunctions {
     }
     public static void goToSettings(Context ctx){
         Intent intent=new Intent(ctx,Settings.class);
+        ctx.startActivity(intent);
+    }
+    public static void goToIndividualMessage(Context ctx){
+        Intent intent=new Intent(ctx,IndividualMessage.class);
         ctx.startActivity(intent);
     }
     public static void LogOut(Context ctx){
@@ -77,6 +82,9 @@ public class CommonFunctions {
             case R.id.settingsMenu:
                 CommonFunctions.goToSettings(ctx);
                 break;
+            case R.id.individualMessage:
+                CommonFunctions.goToIndividualMessage(ctx);
+                break;
         }
     }
 
@@ -85,6 +93,7 @@ public class CommonFunctions {
         menu.findItem(R.id.main).setVisible(false);
         menu.findItem(R.id.logOut).setVisible(false);
         menu.findItem(R.id.settingsMenu).setVisible(false);
+        menu.findItem(R.id.individualMessage).setVisible(false);
     }
 
 }
