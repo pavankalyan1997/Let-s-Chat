@@ -14,6 +14,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -78,23 +80,27 @@ public class IndividualMessage extends AppCompatActivity {
         Toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
         Toggle.syncState();
 
+
         final String user1=currentUser.getUid();
-        final String user2;
+        final String user2=getIntent().getStringExtra("ContactUID");
         String myToken=currentUser.getUid();
         String otherToken;
         String mainToken;
-        if(currentUser.getUid().equals("WZKQ9qT4qoZ8GvFQquY9HShH2m82")){
+        mainToken=user1+user2;
+        final String Token1=user1+user2;
+        final String Token2=user2+user1;
+        /*if(currentUser.getUid().equals("WZKQ9qT4qoZ8GvFQquY9HShH2m82")){
             otherToken="CXBRa3GW82SWtqoQF6KzOVDnRNe2";
-            user2="CXBRa3GW82SWtqoQF6KzOVDnRNe2";
+            //user2="CXBRa3GW82SWtqoQF6KzOVDnRNe2";
             mainToken="WZKQ9qT4qoZ8GvFQquY9HShH2m82"+"CXBRa3GW82SWtqoQF6KzOVDnRNe2";
 
         }else{
             otherToken="WZKQ9qT4qoZ8GvFQquY9HShH2m82";
-            user2="WZKQ9qT4qoZ8GvFQquY9HShH2m82";
+            //user2="WZKQ9qT4qoZ8GvFQquY9HShH2m82";
             mainToken="CXBRa3GW82SWtqoQF6KzOVDnRNe2"+"WZKQ9qT4qoZ8GvFQquY9HShH2m82";
-        }
-        final String Token1=myToken+otherToken;
-        final String Token2=otherToken+myToken;
+        }*/
+        //final String Token1=myToken+otherToken;
+        //final String Token2=otherToken+myToken;
 
         try {
             FirebaseDatabase.getInstance().getReference().child("Messages").child(currentUser.getUid()).child(mainToken).limitToLast(1).addValueEventListener(new ValueEventListener() {
@@ -107,6 +113,9 @@ public class IndividualMessage extends AppCompatActivity {
                             sendPushNotification(IndividualMessage.this,message);
                             Toast.makeText(IndividualMessage.this, "Message : "+data.getKey(), Toast.LENGTH_LONG).show();
                             break;
+                        }
+                        else if(sender.equals(currentUser.getUid()) && isChatpageOpened){
+
                         }
                     }
 
@@ -121,8 +130,20 @@ public class IndividualMessage extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-        if(currentUser.getUid().equals("CXBRa3GW82SWtqoQF6KzOVDnRNe2")){
-            FirebaseDatabase.getInstance().getReference().child("Users").child("WZKQ9qT4qoZ8GvFQquY9HShH2m82").child("userName").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("Users").child(user2).child("userName").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                receiverNameString=dataSnapshot.getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        /*if(currentUser.getUid().equals("CXBRa3GW82SWtqoQF6KzOVDnRNe2")){
+            FirebaseDatabase.getInstance().getReference().child("Users").child(user2).child("userName").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     receiverNameString=dataSnapshot.getValue().toString();
@@ -146,7 +167,7 @@ public class IndividualMessage extends AppCompatActivity {
 
                 }
             });
-        }
+        }*/
 
 
 
@@ -158,14 +179,14 @@ public class IndividualMessage extends AppCompatActivity {
             public void onClick(View v) {
                 String message=typeMessage.getText().toString().trim();
                 if(!message.isEmpty()) {
-                    String sender=mAuth.getUid();
-                    String receiver;
-                    if(sender.equals("WZKQ9qT4qoZ8GvFQquY9HShH2m82")){
+                    String sender=user1;
+                    String receiver=user2;
+                    /*if(sender.equals("WZKQ9qT4qoZ8GvFQquY9HShH2m82")){
                         receiver="CXBRa3GW82SWtqoQF6KzOVDnRNe2";
                     }
                     else{
                         receiver="WZKQ9qT4qoZ8GvFQquY9HShH2m82";
-                    }
+                    }*/
                     final Message msg = new Message(message,
                             "current Time",
                             "text",
@@ -191,10 +212,22 @@ public class IndividualMessage extends AppCompatActivity {
                             }
                         }
                     });
+
+                    try {
+                        MediaPlayer alertSound= MediaPlayer.create(IndividualMessage.this,R.raw.text_message_alert);
+                        alertSound.start();
+                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                        r.play();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+
 
             }
         });
+
 
         linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);

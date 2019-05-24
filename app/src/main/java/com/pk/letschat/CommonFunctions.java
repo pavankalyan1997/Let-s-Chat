@@ -94,6 +94,7 @@ public class CommonFunctions {
         menu.findItem(R.id.logOut).setVisible(false);
         menu.findItem(R.id.settingsMenu).setVisible(false);
         menu.findItem(R.id.individualMessage).setVisible(false);
+        menu.findItem(R.id.refreshContacts).setVisible(false);
     }
 
 }

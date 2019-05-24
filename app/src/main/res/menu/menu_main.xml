@@ -23,4 +23,9 @@
         android:icon="@drawable/common_full_open_on_phone"
         android:title="Message"/>
 
+    <item
+        android:id="@+id/refreshContacts"
+        android:icon="@drawable/common_full_open_on_phone"
+        android:title="Refresh"/>
+
 </menu>

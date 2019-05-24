@@ -13,19 +13,23 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Click Here to load Contacts" />
-
         <ListView
-            android:id="@+id/listview1"
+            android:id="@+id/listView1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/button1"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="0dp" />
+            android:layout_marginBottom="0dp"
+            android:background="@color/toolBarColor"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/contactRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp"
+            android:background="@color/toolBarColor" />
+
 
 
     </LinearLayout>

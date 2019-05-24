@@ -113,9 +113,9 @@ public class SignUp extends AppCompatActivity{
                             Toast.makeText(SignUp.this,"Account Created Successfully",Toast.LENGTH_SHORT).show();
                             signUpProgressbar.setVisibility(View.VISIBLE);
                             FirebaseUser currentUser = mAuth.getCurrentUser();
-                            String uid=currentUser.getUid();
+                            final String uid=currentUser.getUid();
                             DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
-                            HashMap<String,String>user=new HashMap<>();
+                            final HashMap<String,String>user=new HashMap<>();
                             user.put("uid",uid);
                             user.put("id","some unique value");
                             user.put("email",email);
