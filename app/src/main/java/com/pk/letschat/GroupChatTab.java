@@ -26,7 +26,7 @@ public class GroupChatTab extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.activity_group_chat_tab,container,false);
 
-        recyclerView=view.findViewById(R.id.contactRecyclerView);
+        recyclerView=view.findViewById(R.id.contactRecyclerViewGrpChat);
 
 
         return view;

@@ -2,23 +2,24 @@ package com.pk.letschat;
 
 public class Message {
     private String message;
-    private String time;
+    private String messageStatus;
     private String messageType;
     private String receiver;
     private String sender;
-    private String messageStatus;
+    private String time;
 
-    public Message(String message, String time, String messageType, String receiver, String sender, String messageStatus) {
+
+    public Message(String message, String messageStatus, String messageType, String receiver, String sender, String time) {
         this.message = message;
-        this.time = time;
+        this.messageStatus = messageStatus;
         this.messageType = messageType;
         this.receiver = receiver;
         this.sender = sender;
-        this.messageStatus = messageStatus;
-
+        this.time = time;
     }
 
-
+    public Message() {
+    }
 
     public String getMessage() {
         return message;

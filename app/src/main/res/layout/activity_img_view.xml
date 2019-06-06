@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_google_signin_btn_text_dark_focused"
+    android:orientation="vertical"
+    tools:context=".ImgView">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBarImgView"
+        style="@style/ToolBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/common_google_signin_btn_text_dark_focused"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:theme="@style/ToolBarStyle"
+        app:titleTextColor="@color/toolBarColor">
+
+        <LinearLayout
+            android:id="@+id/backButtonLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/backButtonImgView"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_back" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/imgViewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sample"
+                android:textColor="#fff"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ImageView
+        android:id="@+id/zoomedImageImgView"
+        android:layout_width="match_parent"
+        android:layout_height="511dp"
+        app:srcCompat="@drawable/propic" />
+
+</LinearLayout>

@@ -8,6 +8,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
@@ -104,14 +106,21 @@ public class SignUp extends AppCompatActivity{
                     txtPassword.requestFocus();
                     return;
                 }
-                signUpProgressbar.setVisibility(View.VISIBLE);
+                //signUpProgressbar.setVisibility(View.VISIBLE);
+                final ProgressDialog mProgressDialog;
+                mProgressDialog = new ProgressDialog(SignUp.this);
+                mProgressDialog.setTitle("Signing UP!");
+                mProgressDialog.setMessage("Please wait while you are being Signed up!");
+                mProgressDialog.setCanceledOnTouchOutside(false);
+                mProgressDialog.show();
 
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SignUp.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+                            mProgressDialog.dismiss();
                             Toast.makeText(SignUp.this,"Account Created Successfully",Toast.LENGTH_SHORT).show();
-                            signUpProgressbar.setVisibility(View.VISIBLE);
+                            //signUpProgressbar.setVisibility(View.VISIBLE);
                             FirebaseUser currentUser = mAuth.getCurrentUser();
                             final String uid=currentUser.getUid();
                             DatabaseReference ref=FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
@@ -132,6 +141,7 @@ public class SignUp extends AppCompatActivity{
                             });
                             CommonFunctions.goToMain(SignUp.this,true);
                         }else{
+                            mProgressDialog.dismiss();
                             Toast.makeText(SignUp.this, "Error while creating Account. Please try after some time", Toast.LENGTH_SHORT).show();
                         }
                     }

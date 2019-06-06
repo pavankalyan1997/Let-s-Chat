@@ -1,8 +1,5 @@
 package com.pk.letschat;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -14,7 +11,6 @@ import androidx.viewpager.widget.ViewPager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.Toast;
 
 
@@ -22,16 +18,17 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
+import com.pk.letschat.DBCalls.LetsChatDataBase;
 
 public class MainActivity extends AppCompatActivity{
+    private static final int SMS_PERMISSION_CODE =0 ;
     private FirebaseAuth mAuth;
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle Toggle;
     static boolean isLogged=false;
-    SQLiteDatabase sqLiteDatabase;
     Toolbar mToolbar;
+
+    LetsChatDataBase letsChatLetsChatDataBase;
 
 
 
@@ -40,21 +37,24 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        letsChatLetsChatDataBase =new LetsChatDataBase(this);
+
         mToolbar=findViewById(R.id.toolbarMain);
         setSupportActionBar(mToolbar);
 
 
+
+
         //setActionBar(mToolbar);
         //setSupportActionBar(mToolbar);
-        sqLiteDatabase=openOrCreateDatabase("CHAT",MODE_PRIVATE,null);
         FirebaseApp.initializeApp(this);
         FirebaseApp.initializeApp(MainActivity.this);
         mAuth = FirebaseAuth.getInstance();
         drawerLayout=findViewById(R.id.DrawerLayoutMain);
         Toggle=new ActionBarDrawerToggle(this,drawerLayout,R.string.open,R.string.close);
         Toggle.syncState();
-        String createSQL="create table if not exists userDetails(Name varchar,phoneNumber varchar,eMail varchar)";
-        sqLiteDatabase.execSQL(createSQL);
+
+
 
         TabLayout tabLayout=findViewById(R.id.tab_layout_main);
         tabLayout.addTab(tabLayout.newTab().setText("Chats"));
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity{
 
 
     }
+
 
     @Override
     public void onStart() {

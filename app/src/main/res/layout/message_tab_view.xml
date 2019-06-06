@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,12 +10,16 @@
         android:layout_height="60dp"
         android:orientation="horizontal">
 
-
+        <!--<ImageView
+            android:layout_width="95dp"
+            android:layout_height="93dp"
+            android:src="@drawable/propic"
+            app:riv_oval="true"/> -->
         <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profileImage"
+            android:id="@+id/profileImageMessageTab"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:padding="2dp"
+            android:layout_height="match_parent"
+            android:padding="3dp"
             android:scaleType="fitCenter"
             android:src="@drawable/propic"
             app:riv_border_color="#fff"
@@ -24,32 +28,30 @@
             app:riv_oval="true" />
 
         <LinearLayout
-            android:id="@+id/ContactFull"
+            android:id="@+id/MessageFull"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/contactName"
+                android:id="@+id/contactNameMessageTab"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:padding="5dp"
                 android:text="Contact Name"
                 android:textAlignment="viewStart"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:gravity="start" />
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/contactPhoneNumber"
+                android:id="@+id/contactRecentMessage"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:padding="5dp"
-                android:text="Contact Phone Number" />
+                android:text="Contact Recent Message" />
 
         </LinearLayout>
 
     </LinearLayout>
-
 
 </LinearLayout>

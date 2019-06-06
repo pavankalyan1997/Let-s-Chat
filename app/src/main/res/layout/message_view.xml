@@ -12,10 +12,45 @@
         android:paddingVertical="10dp"
         android:paddingLeft="60dp"
         android:paddingRight="15dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/LinearLayoutMyMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/my_message"
+            android:elevation="2dp"
+            android:gravity="center_vertical|center_horizontal|right"
+            android:orientation="vertical"
+            android:padding="2dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/message_body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:elevation="2dp"
+                android:gravity="left"
+                android:padding="10dp"
+                android:text="Place Holder Message"
+                android:textColor="#262626"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/my_message_current_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingLeft="5dp"
+                android:text="11:38 AM"
+                android:textColor="#9AA0AE"
+                android:textSize="12dp" />
+
+        </LinearLayout>
+       <!-- <TextView
             android:id="@+id/message_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,9 +59,8 @@
             android:elevation="2dp"
             android:padding="10dp"
             android:text="Placeholder message"
-            android:textColor="#fff"
-            android:textSize="18dp"
-            />
+            android:textColor="#262626"
+            android:textSize="16dp" /> -->
 
     </RelativeLayout>
 
@@ -41,7 +75,7 @@
         android:visibility="gone">
 
         <View
-            android:id="@+id/avatar"
+            android:id="@+id/avatarIndividualMessage"
             android:layout_width="34dp"
             android:layout_height="34dp"
             android:layout_alignParentLeft="true"
@@ -52,13 +86,45 @@
             android:id="@+id/receiverName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/avatar"
+            android:layout_alignTop="@+id/avatarIndividualMessage"
             android:layout_marginLeft="15dp"
-            android:layout_toRightOf="@+id/avatar"
+            android:layout_toRightOf="@+id/avatarIndividualMessage"
             android:paddingBottom="4dp"
             android:text="Harika" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/LinearLayoutTheirMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/receiverName"
+            android:layout_alignLeft="@+id/receiverName"
+            android:background="@drawable/their_message"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp">
+
+            <TextView
+                android:id="@+id/their_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="How are you doing? This is a long message that should probably wrap."
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/their_message_current_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:paddingRight="5dp"
+                android:text="11:38 AM"
+                android:textColor="#9AA0AE"
+                android:textSize="12dp" />
+
+
+        </LinearLayout>
+
+        <!-- <TextView
             android:id="@+id/their_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,7 +135,9 @@
             android:paddingHorizontal="16dp"
             android:paddingVertical="12dp"
             android:text="How are you doing? This is a long message that should probably wrap."
-            android:textSize="18dp" />
+            android:textSize="16dp" />  -->
+
+
     </RelativeLayout>
 
 

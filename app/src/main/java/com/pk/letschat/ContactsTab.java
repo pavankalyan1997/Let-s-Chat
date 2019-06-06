@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -15,9 +16,13 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +38,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
+
 
 public class ContactsTab extends Fragment {
 
@@ -44,9 +54,11 @@ public class ContactsTab extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ContactAdapter mContactAdapter;
-    private ArrayList<Contact>storeContactsList=new ArrayList<>();
+    private List<Contact> storeContactsList=new ArrayList<>();
+    private List<Contact> storeContactsListFull=new ArrayList<>();
     private Adapter adapter;
     public static final int RequestPermissionCode=1;
+    SQLiteDatabase sqLiteDatabase;
 
 
 
@@ -56,9 +68,13 @@ public class ContactsTab extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.activity_contacts_tab,container,false);
 
+
         setHasOptionsMenu(true);
         recyclerView=view.findViewById(R.id.contactRecyclerView);
-        mContactAdapter=new ContactAdapter(storeContactsList);
+
+        mContactAdapter=new ContactAdapter(storeContactsList,storeContactsListFull);
+
+
         RecyclerView.LayoutManager mLayoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -70,6 +86,7 @@ public class ContactsTab extends Fragment {
         StoreContacts=new ArrayList<String>();
 
         EnableRuntimePermission();
+        RefreshContacts();
 
 
 
@@ -125,7 +142,6 @@ public class ContactsTab extends Fragment {
 
                 //Toast.makeText(getActivity(), name + " "  + ":" + " " + phonenumber, Toast.LENGTH_SHORT).show();
             }
-            mContactAdapter.notifyDataSetChanged();
             Collections.sort(StoreContacts);
             Collections.sort(storeContactsList, new Comparator<Contact>() {
                 @Override
@@ -133,7 +149,7 @@ public class ContactsTab extends Fragment {
                     return o1.getContactName().compareTo(o2.getContactName());
                 }
             });
-
+            storeContactsListFull.addAll(storeContactsList);
             cursor.close();
 
         }catch (Exception e){
@@ -181,20 +197,37 @@ public class ContactsTab extends Fragment {
     }
 
     private void RefreshContacts() {
-        ProgressDialog progressDialog=new ProgressDialog(getActivity());
-        progressDialog.setTitle("Refreshing Contacts");
-        progressDialog.setMessage("Please wait while we refresh your contacts");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-
-
         GetContactsIntoArrayList();
         arrayAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.contact_items_listview,
                 R.id.textView, StoreContacts
         );
-        progressDialog.dismiss();
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+        inflater.inflate(R.menu.search_menu,menu);
+
+        MenuItem searchItem=menu.findItem(R.id.action_search);
+        SearchView searchView=(SearchView)searchItem.getActionView();
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Toast.makeText(getContext(), "function called "+newText, Toast.LENGTH_SHORT).show();
+                mContactAdapter.getFilter().filter(newText);
+                return true;
+            }
+        });
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -203,11 +236,12 @@ public class ContactsTab extends Fragment {
             case R.id.refreshContacts:
                 RefreshContacts();
                 break;
-
         }
 
         return false;
     }
+
+
 }
 
 

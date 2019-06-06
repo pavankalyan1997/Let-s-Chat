@@ -1,33 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/DrawerLayoutMessages"
+    android:id="@+id/ScrollViewMessages"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".MessagesTab">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ScrollView
-            android:id="@+id/scrollViewMessage"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/messageRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="0dp"
-            android:background="@color/common_google_signin_btn_text_dark_disabled">
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp"
+            android:background="@color/toolBarColor" />
 
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="This is Messages Tab" />
-        </ScrollView>
 
-
-    </RelativeLayout>
-
-</androidx.drawerlayout.widget.DrawerLayout>
+    </LinearLayout>
+</ScrollView>

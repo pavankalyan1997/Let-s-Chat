@@ -7,6 +7,9 @@ public class Contact{
     private String Status;
     private String contactPic;
 
+    public Contact() {
+    }
+
     public Contact(String contactName, String phoneNumber, String uid, String status, String contactPic) {
         this.contactName = contactName;
         this.phoneNumber = phoneNumber;

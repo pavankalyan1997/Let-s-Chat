@@ -13,15 +13,84 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarIndividualMessage"
+            style="@style/ToolBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:theme="@style/ToolBarStyle"
+            app:titleTextColor="@color/toolBarColor">
+
+            <LinearLayout
+                android:id="@+id/profileImgLinearLayoutToolBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_back" />
+
+
+                <com.makeramen.roundedimageview.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/profileImageToolBar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="left"
+                    android:src="@drawable/propic"
+                    app:riv_border_color="#fff"
+                    app:riv_corner_radius_bottom_left="30dp"
+                    app:riv_mutate_background="true"
+                    app:riv_oval="true" />
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/profileNameToolBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sample"
+                    android:textColor="#fff"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/profileStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Online"
+                    android:textColor="#fff"
+                    android:textSize="16dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
         <ScrollView
             android:id="@+id/scrollViewMessage"
             android:layout_width="match_parent"
-            android:layout_height="658dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
+            android:layout_height="600dp"
+            android:layout_above="@+id/TypeMessageLayout"
+            android:layout_below="@+id/toolbarIndividualMessage"
             android:layout_marginTop="0dp"
-            android:layout_marginBottom="73dp"
-            android:background="@color/common_google_signin_btn_text_dark_disabled">
+            android:layout_marginBottom="0dp"
+            android:background="@color/common_google_signin_btn_text_dark_disabled"
+            android:scrollY="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"

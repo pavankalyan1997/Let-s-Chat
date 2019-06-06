@@ -7,6 +7,8 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Menu;
@@ -89,28 +91,37 @@ public class LogIn extends AppCompatActivity{
                     passwordLayout.requestFocus();
                     return;
                 }
-                progressBar.setVisibility(View.VISIBLE);
+                final ProgressDialog mProgressDialog;
+                mProgressDialog = new ProgressDialog(LogIn.this);
+                mProgressDialog.setTitle("Logging in");
+                mProgressDialog.setMessage("Please wait while you are being logged in!");
+                mProgressDialog.setCanceledOnTouchOutside(false);
+                mProgressDialog.show();
+                //progressBar.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             finish();
+                            //progressBar.setVisibility(View.GONE);
+                            mProgressDialog.dismiss();
                             CommonFunctions.goToMain(LogIn.this,true);
                         }
                         else{
+                            mProgressDialog.dismiss();
                             Toast.makeText(LogIn.this, "Invalid User Name or Password", Toast.LENGTH_SHORT).show();
 
                         }
                     }
                 });
-                progressBar.setVisibility(View.GONE);
-            }
-        });
 
-        txtNoAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CommonFunctions.goToSignUp(LogIn.this);
+                txtNoAccount.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CommonFunctions.goToSignUp(LogIn.this);
+                    }
+                });
+
             }
         });
     }

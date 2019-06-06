@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -77,7 +78,7 @@ public class Settings extends AppCompatActivity {
     SQLiteDatabase sqLiteDatabase;
     LinearLayout nameLayout,aboutLayout;
     TextView nameActual,aboutActual,phoneNumberActual;
-    Uri uriProfileImage;
+
     private ProgressDialog mProgressDialog,loadProcess;
 
     private DatabaseReference mUserDatabase;
@@ -159,13 +160,22 @@ public class Settings extends AppCompatActivity {
                 }
                 else {
 
+
                     mImageStorage.child("profile_images").child("thumbs").child(current_uid + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
-                        public void onSuccess(Uri uri) {
+                        public void onSuccess(final Uri uri) {
                             nameActual.setText(name);
                             aboutActual.setText(status);
                             phoneNumberActual.setText(phoneNumber);
                             Picasso.get().load(uri.toString()).placeholder(R.drawable.propic).into(profileImg);
+                            loadProcess.dismiss();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            nameActual.setText(name);
+                            aboutActual.setText(status);
+                            phoneNumberActual.setText(phoneNumber);
                             loadProcess.dismiss();
                         }
                     });
@@ -187,7 +197,8 @@ public class Settings extends AppCompatActivity {
         profileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // add code to expand the image
+                CommonFunctions.goToImgView(Settings.this,current_uid,nameActual.getText().toString());
+
 
             }
         });
